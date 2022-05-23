@@ -2,9 +2,7 @@ import { NativeModules, Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 const { MultipleImagePicker } = NativeModules;
 
-let exportObject = {};
-
-let defaultOptions = {
+const defaultOptions = {
   //**iOS**//
   usedPrefetch: false,
   allowedAlbumCloudShared: false,
@@ -59,25 +57,16 @@ let defaultOptions = {
   // emptyImage: Image,
 };
 
-exportObject = {
-  openPicker: (optionsPicker) => {
-    const options = {
-      ...defaultOptions,
-      ...optionsPicker,
-    };
-    if (options.singleSelectedMode) {
-      options.selectedAssets = []
-    };
+const openPicker = (optionsPicker = {}) => {
+  const options = {
+    ...defaultOptions,
+    ...optionsPicker,
+  };
+  if (options.singleSelectedMode) {
+    options.selectedAssets = []
+  };
 
-    return new Promise(async (resolve, reject) => {
-      try {
-        const response = await MultipleImagePicker.openPicker(options);
-        resolve(response || [])
-      } catch (e) {
-        reject(e);
-      }
-    });
-  },
-};
+  return MultipleImagePicker.openPicker(options)
+}
 
-export default exportObject;
+export default { openPicker };
