@@ -65,21 +65,14 @@ exportObject = {
       ...defaultOptions,
       ...optionsPicker,
     };
-    const isSingle = options?.singleSelectedMode ?? false;
-    if (isSingle) options.selectedAssets = [];
+    if (options.singleSelectedMode) {
+      options.selectedAssets = []
+    };
 
     return new Promise(async (resolve, reject) => {
       try {
         const response = await MultipleImagePicker.openPicker(options);
-        // console.log('res', response);
-        if (response?.length) {
-          if (isSingle) {
-            resolve(response[0]);
-          }
-          resolve(response);
-          return;
-        }
-        resolve([]);
+        resolve(response || [])
       } catch (e) {
         reject(e);
       }
